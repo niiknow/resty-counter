@@ -39,3 +39,11 @@ luac.out
 *.x86_64
 *.hex
 
+*.swp
+*.swo
+*~
+go
+t/servroot/
+reindex
+.DS_Store
+dockerfiles/app/codecache/*
