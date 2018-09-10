@@ -14,8 +14,10 @@ function utils:exit()
   ngx.exec('@empty')
 end
 
-function utils:lookupCount(tenant, key) 
-  local red      = redis:new()
+function utils:lookupCount(tenant, day, key) 
+  local red  = redis:new()
+  local hkey = string.format("%s!%s", tenant, day, key)
+
   red:set_timeout(3000) -- 3 sec
 
   local ok, err = red:connect("redis.local", 6379)
@@ -25,7 +27,20 @@ function utils:lookupCount(tenant, key)
     ngx.exit(ngx.ERROR)
   end
 
-  local vc, err = red:hget(tenant, key);
+
+  -- get today
+  local vc, err = red:hget(hkey, key);
+  -- return error here
+  if not vc then
+    ngx.log(ngx.ERR, err)
+    ngx.exit(ngx.ERROR)
+  end
+
+  local yesterday = os.date("%d", os.time()-24*60*60)
+  local hkey2 = string.format("%s!%s", tenant, yesterday, key)
+  
+  -- get yesterday
+  local vc2, err = red:hget(hkey2, key);
   -- return error here
   if not vc then
     ngx.log(ngx.ERR, err)
@@ -37,21 +52,22 @@ function utils:lookupCount(tenant, key)
   local ok, err = red:set_keepalive(10000, 1000)
   -- return error here
 
-  return ngx.say(vc)
+  return ngx.say(string.format("%s,%s", vc, vc2))
 end
 
-function utils:count(tenant, key)
-  local red = redis:new()
+function utils:count(tenant, day, key)
+  local red  = redis:new()
+  local hkey = string.format("%s!%s", tenant, day, key)
   red:set_timeout(3000) -- 3 sec
 
   local ok, err = red:connect("redis.local", 6379)
   if not ok then utils:logErrorAndExit("Error connecting to redis: ".. err) end
 
-  local res, err = red:hincrby(tenant, key, 1)
+  local res, err = red:hincrby(hkey, key, 1)
 
   if res == 1 then
-    -- set expire in 1 day
-    red:expireat(tenant, time + 86400)
+    -- set expire in 3 days
+    red:expireat(hkey, time + 86400 * 3)
   end
 
   -- put it into the connection pool of size 1000,

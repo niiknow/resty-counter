@@ -38,7 +38,7 @@ location ~ ^/lookup/([a-z0-9]+)/([^/]+)$ {
     access_log     off;
     log_not_found  off;
 
-    set $tenant    "$1!$day";
+    set $tenant    $1;
     set $key       $2;
     default_type   text/plain;
     content_by_lua_file "lookup.lua";
@@ -46,7 +46,7 @@ location ~ ^/lookup/([a-z0-9]+)/([^/]+)$ {
 
 location ~ ^/t/([a-z0-9]+)/([^/]+)$ {
     resolver       127.0.0.11 ipv6=off;
-    set $tenant    "$1!$day";
+    set $tenant    $1;
     set $key       $2;
 
     content_by_lua_file "count.lua";
