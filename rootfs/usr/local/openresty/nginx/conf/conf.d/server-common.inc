@@ -22,8 +22,12 @@ location @empty {
 }
 
 location /healthcheck {
+    resolver     127.0.0.11 ipv6=off;
     default_type text/plain;
-    return 200 "OK";
+
+    content_by_lua_block {
+        require('.utils'):healthcheck()
+    }
 }
 
 # deny bots
