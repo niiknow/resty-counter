@@ -21,6 +21,18 @@ location @empty {
     empty_gif;
 }
 
+location /healthcheck {
+    default_type text/plain;
+    return 200 "OK";
+}
+
+# deny bots
+location /robots.txt {
+    access_log   off;
+    default_type text/plain;
+    return 200 "User-agent: *\nDisallow: /\n";
+}
+
 location ~ ^/lookup/([a-z0-9]+)/([^/]+)$ {
     resolver       127.0.0.11 ipv6=off;
     access_log     off;
