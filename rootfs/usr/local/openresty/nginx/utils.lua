@@ -30,10 +30,10 @@ function utils:lookupCount(tenant, day, key)
 
   -- get today
   local vc, err = red:hget(hkey, key);
+
   -- return error here
-  if not vc then
-    ngx.log(ngx.ERR, err)
-    ngx.exit(ngx.ERROR)
+  if not vc or vc == ngx.null then
+    vc = 0
   end
 
   local yesterday = os.date("%d", os.time()-24*60*60)
@@ -41,10 +41,10 @@ function utils:lookupCount(tenant, day, key)
   
   -- get yesterday
   local vc2, err = red:hget(hkey2, key);
+
   -- return error here
-  if not vc then
-    ngx.log(ngx.ERR, err)
-    ngx.exit(ngx.ERROR)
+  if not vc2 or vc2 == ngx.null then
+    vc2 = 0
   end
 
   -- put it into the connection pool of size 100,
@@ -52,7 +52,7 @@ function utils:lookupCount(tenant, day, key)
   local ok, err = red:set_keepalive(10000, 1000)
   -- return error here
 
-  return ngx.say(string.format("%s,%s", vc, vc2))
+  return ngx.say(string.format("%s,%s", tostring(vc), tostring(vc2)))
 end
 
 function utils:count(tenant, day, key)

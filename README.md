@@ -21,17 +21,19 @@ https://pi.example.com/t/tenantcode/counterid
 To lookup impression/count in the last 24-48 hours: 
 
 ```shell
-https://pi.example.com/lookup/tenantcode/counterid
+https://pi.example.com/lookup/tenantcode/counterid?apiKey=resty-counter
 # response: todayCount, yesterdayCount
 ```
 
 Docker environment variable and examples:
 ```shell
---env DOMAINS='(pi.example.com|pixel.example.com)' \
+--env ALLOWED_DOMAINS='(pi.example.com|pixel.example.com)' \
 --env AWS_ACCESS_KEY_ID=<<YOUR_ACCESS_KEY>> \
 --env AWS_SECRET_ACCESS_KEY=<<YOUR_SECRET_ACCESS>> \
 --env AWS_DEFAULT_REGION=us-west-2 \
 --env AWS_PATH=bucketname/rootfolder
+--env REDIS_HOST=redis-host-name
+--env LOOKUP_API_KEY=pass-this-in-querystring-as-apiKey
 ```
 
 ## Suggestion
