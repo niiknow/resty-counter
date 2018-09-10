@@ -9,8 +9,12 @@ gunzip -f GeoLiteCity.dat.gz
 rm -f /usr/local/openresty/nginx/conf/conf.d/GeoLiteCity.dat
 mv GeoLiteCity.dat /usr/local/openresty/nginx/conf/conf.d/GeoLiteCity.dat
 
-# hit local healthcheck to force create new log
-curl -s 'http://localhost/healthcheck?cron=update-geo'
+# archive old error log
+rm -f /usr/local/openresty/nginx/logs/old-error.log
+mv /usr/local/openresty/nginx/logs/error.log /usr/local/openresty/nginx/logs/old-error.log
 
 # reload nginx to make sure new log is created
 /usr/local/openresty/bin/openresty -s reload
+
+# hit local healthcheck to force create new log
+curl -s 'http://localhost/healthcheck?cron=update-geo'
