@@ -1,7 +1,9 @@
 # resty-counter
 > Simple high-performance hit/impression counter
 
-RESTY-COUNTER is a userful/powerful SaaS toolkit.  Every SaaS will need something cheap to track hit/impression and provide reporting to the client.
+resty-counter is a userful/powerful SaaS tool.  Every SaaS will need something cheap to track hit/impression and provide reporting to the client.
+
+We use redis to provide **live** counter data.  The formula for getting **live** counter is: {aggregated log data} + {redis data} = {!!! profit !!!}
 
 # TECH STACK
 * **openresty** - use to create daily log files in the format "yyyy-mm-dd-access.log" and daily cron sync to "s3://bucket-name/year=yyyy/month=mm/day=dd/yyyy-mm-dd-access.log"
