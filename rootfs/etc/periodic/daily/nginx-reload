@@ -16,8 +16,10 @@ mv GeoLiteCity.dat /usr/local/openresty/nginx/conf/conf.d/GeoLiteCity.dat
 if [[ "$AWS_PATH" != '' ]]; then
   LOGDIR="/usr/local/openresty/nginx/logs/";
 
-  # sync everything
-  for line in `find $LOGDIR -name "*-access.log"`
+  # sync all access log files modified more than 2 hours ago
+  # this mean current date file should not be included if
+  # you have something correctly hitting health check
+  for line in `find $LOGDIR -mtime -120 -name "*-access.log"`
     do
     echo $line;
     file=`echo $line | awk -F "/" '{ print $NF }'`;
@@ -34,8 +36,10 @@ if [[ "$AWS_PATH" != '' ]]; then
         if [ $RETVAL -ne 0 ]
         then
           aws s3 cp $line s3://$AWS_PATH/year=$YEAR/month=$MONTH/day=$DAY/
-          rm -f $line
         fi
       fi
     done
+
+  # delete any log older than 7 days
+  find $LOGDIR -type f -mtime -10080 -exec rm -f {} \;
 fi
