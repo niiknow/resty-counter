@@ -46,4 +46,4 @@ go
 t/servroot/
 reindex
 .DS_Store
-dockerfiles/app/codecache/*
+tmp/*

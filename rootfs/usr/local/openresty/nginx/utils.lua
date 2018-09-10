@@ -14,26 +14,18 @@ function utils:exit()
   ngx.exec('@empty')
 end
 
-function utils:buildKey(tenant)
-  local time     = os.time()
-  local daysLeft = 32 - os.date("%c")
-  local month    = os.date("%m")
-  return string.format("%s!%s", tenant, month)
-end
-
 function utils:lookupCount(tenant, key) 
   local red      = redis:new()
   red:set_timeout(3000) -- 3 sec
 
-  local ok, err = red:connect("redis", 6379)
+  local ok, err = red:connect("redis.local", 6379)
   -- return error here
   if not ok then
     ngx.log(ngx.ERR, err)
     ngx.exit(ngx.ERROR)
   end
 
-  local hkey = utils:buildKey(tenant)
-  local vc, err = red:hget(hkey, key);
+  local vc, err = red:hget(tenant, key);
   -- return error here
   if not vc then
     ngx.log(ngx.ERR, err)
@@ -52,15 +44,14 @@ function utils:count(tenant, key)
   local red = redis:new()
   red:set_timeout(3000) -- 3 sec
 
-  local ok, err = red:connect("redis", 6379)
+  local ok, err = red:connect("redis.local", 6379)
   if not ok then utils:logErrorAndExit("Error connecting to redis: ".. err) end
 
-  local hkey = utils:buildKey(tenant)
-  local res, err = red:hincrby(hkey, key)
+  local res, err = red:hincrby(tenant, key, 1)
 
   if res == 1 then
-    -- set expire in 31 days
-    red:expireat(hkey, time + 86400 * daysLeft)
+    -- set expire in 1 day
+    red:expireat(tenant, time + 86400)
   end
 
   -- put it into the connection pool of size 1000,

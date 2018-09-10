@@ -1,10 +1,18 @@
 version: '3'
 services:
-  app:
-    build: .
-    container_name: niiknow_app
-    ports:
-      - "8000:8000"
   redis:
     image: "redis:alpine"
-    container_name: niiknow_redis
+    expose:
+      - 6379
+
+  resty_counter:
+    build: .
+    volumes:
+      - "./tmp/conf:/usr/local/openresty/nginx/conf/conf.d"
+      - "./tmp/logs:/usr/local/openresty/nginx/logs"
+    depends_on:
+      - redis
+    ports:
+      - "8001:80"
+    links:
+      - redis:redis.local

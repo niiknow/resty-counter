@@ -1,0 +1,43 @@
+limit_req zone=perip burst=10 nodelay;
+
+if ($time_iso8601 ~ "^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})") {
+    set $year    $1;
+    set $month   $2;
+    set $day     $3;
+    set $hour    $4;
+    set $minutes $5;
+    set $seconds $6;
+}
+
+access_log "/usr/local/openresty/nginx/logs/$year-$month-$day-$hour-hcaccess.log" main;
+log_not_found  off;
+error_page 400 401 402 403 404 405 406 407 408 409 410 411 412 413 414 415 416 417 418 420 422 423 424 426 428 429 431 444 449 450 451 500 501 502 503 504 505 506 507 508 509 510 511 @error;
+
+location @error {
+    access_log     off;
+    log_not_found  off;
+    empty_gif;
+}
+
+location @empty {
+    empty_gif;
+}
+
+location ~ ^/lookup/([a-z0-9]+)/([^/]+)$ {
+    resolver       127.0.0.11 ipv6=off;
+    access_log     off;
+    log_not_found  off;
+
+    set $tenant    "$1!$day";
+    set $key       $2;
+    default_type   text/plain;
+    content_by_lua_file "lookup.lua";
+}
+
+location ~ ^/t/([a-z0-9]+)/([^/]+)$ {
+    resolver       127.0.0.11 ipv6=off;
+    set $tenant    "$1!$day";
+    set $key       $2;
+
+    content_by_lua_file "count.lua";
+}
