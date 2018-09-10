@@ -2,15 +2,8 @@
 
 source /etc/envvars
 
-# update geoip database
-cd /tmp
-curl -fSL https://geolite.maxmind.com/download/geoip/database/GeoLiteCity.dat.gz -o /tmp/GeoLiteCity.dat.gz
-gunzip -f GeoLiteCity.dat.gz
-rm -f /usr/local/openresty/nginx/conf/conf.d/GeoLiteCity.dat
-mv GeoLiteCity.dat /usr/local/openresty/nginx/conf/conf.d/GeoLiteCity.dat
-
 # hit local healthcheck to force create new log
-curl -s 'http://localhost/healthcheck?cron=daily'
+curl -s 'http://localhost/healthcheck?cron=daily-backup'
 
 # reload nginx to make sure new log is created
 /usr/local/openresty/bin/openresty -s reload

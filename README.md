@@ -7,6 +7,9 @@ We use redis to provide **live** counter data.  The formula for getting **live**
 
 {aggregated log data} + {redis data} = {!!! profit !!!}
 
+* daily backup to s3
+* weekly update of maxmind geoip database
+
 # TECH STACK
 * **openresty** - use to create daily log files in the format "yyyy-mm-dd-access.log" and daily cron sync to "s3://bucket-name/year=yyyy/month=mm/day=dd/yyyy-mm-dd-access.log"
 * **redis** - store 24-48 hours worth of counter.  This allow for 0-24 hours  delay between log processing.
@@ -23,7 +26,7 @@ https://pi.example.com/t/tenantcode/counterid
 To lookup impression/count in the last 24-48 hours: 
 
 ```shell
-https://pi.example.com/lookup/tenantcode/counterid?apiKey=resty-counter
+https://pi.example.com/lookup/tenantcode/counterid?apikey=resty-counter
 # response: todayCount, yesterdayCount
 ```
 
@@ -35,7 +38,7 @@ Docker environment variable and examples:
 --env AWS_DEFAULT_REGION=us-west-2 \
 --env AWS_PATH=bucketname/rootfolder
 --env REDIS_HOST=redis-host-name
---env LOOKUP_API_KEY=pass-this-in-querystring-as-apiKey
+--env API_KEY=pass-this-in-querystring-as-{apikey}
 ```
 
 ## Suggestion

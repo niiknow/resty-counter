@@ -7,8 +7,8 @@ function utils:logErrorAndExit(err)
 end
 
 function utils:exit()
-  if (ngx.var.redir) then
-    return ngx.redirect(ngx.var.redir)
+  if (ngx.var.arg_redir) then
+    return ngx.redirect(ngx.var.arg_redir)
   end
   
   ngx.exec('@empty')

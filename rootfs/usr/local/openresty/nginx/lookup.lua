@@ -1,8 +1,6 @@
 local utils     = require '.utils'
-local apiKey    = os.getenv('API_KEY')
-local args, err = ngx.req.get_uri_args()
 
-if (args['apiKey'] == apiKey) then
+if (ngx.var.arg_apikey == os.getenv('API_KEY')) then
 	utils:lookupCount(ngx.var.tenant, ngx.var.day, ngx.var.key)
 else
 	ngx.status = 403
