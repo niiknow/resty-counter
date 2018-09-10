@@ -4,7 +4,7 @@ LABEL maintainer="noogen <friends@niiknow.org>"
 
 # allowed domains should be lua match pattern
 # example: ^(example.com|example.net)$
-ENV ALLOWED_DOMAINS='.*' AUTO_SSL_VERSION='0.12.0'
+ENV ALLOWED_DOMAINS='.*' AUTO_SSL_VERSION='0.12.0' REDIS_HOST='redis.local' LOOKUP_API_KEY='resty-counter'
 
 RUN \
   # Make info file about this build

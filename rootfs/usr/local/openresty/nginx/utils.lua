@@ -20,7 +20,7 @@ function utils:lookupCount(tenant, day, key)
 
   red:set_timeout(3000) -- 3 sec
 
-  local ok, err = red:connect("redis.local", 6379)
+  local ok, err = red:connect(os.getenv("REDIS_HOST"), 6379)
   -- return error here
   if not ok then
     ngx.log(ngx.ERR, err)
@@ -60,7 +60,7 @@ function utils:count(tenant, day, key)
   local hkey = string.format("%s!%s", tenant, day, key)
   red:set_timeout(3000) -- 3 sec
 
-  local ok, err = red:connect("redis.local", 6379)
+  local ok, err = red:connect(os.getenv("REDIS_HOST"), 6379)
   if not ok then utils:logErrorAndExit("Error connecting to redis: ".. err) end
 
   local res, err = red:hincrby(hkey, key, 1)
