@@ -4,7 +4,7 @@
 RESTY-COUNTER is a userful/powerful SaaS toolkit.  Every SaaS will need something cheap to track hit/impression and provide reporting to the client.
 
 # TECH STACK
-* **openresty** - use to create daily log files in the format "yyyy-mm-dd-access.log" and daily cron sync to "s3://bucket-name/year=yyyy/month=mm/day=dd/yyyy-mm-dd-hh_access.log"
+* **openresty** - use to create daily log files in the format "yyyy-mm-dd-access.log" and daily cron sync to "s3://bucket-name/year=yyyy/month=mm/day=dd/yyyy-mm-dd-access.log"
 * **redis** - store 24-48 hours worth of counter.  This allow for 0-24 hours  delay between log processing.
 * **lua-resty-auto-ssl** - for letsencrypt certificate; because, you know, the web is more secure now?
 
