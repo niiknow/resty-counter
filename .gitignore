@@ -46,4 +46,3 @@ go
 t/servroot/
 reindex
 .DS_Store
-tmp/*

@@ -1,5 +1,7 @@
 #!/bin/sh
 
+source /etc/envvars
+
 # update geoip database
 cd /tmp
 curl -fSL https://geolite.maxmind.com/download/geoip/database/GeoLiteCity.dat.gz -o /tmp/GeoLiteCity.dat.gz
@@ -9,3 +11,31 @@ mv GeoLiteCity.dat /usr/local/openresty/nginx/conf/conf.d/GeoLiteCity.dat
 
 # reload nginx to prevent file lock and immediately clear cache
 /usr/local/openresty/bin/openresty -s reload
+
+# if aws env are entered, then we can do backup
+if [[ "$AWS_PATH" != '' ]]; then
+  LOGDIR="/usr/local/openresty/nginx/logs/";
+
+  # sync everything
+  for line in `find $LOGDIR -name "*-access.log"`
+    do
+    echo $line;
+    file=`echo $line | awk -F "/" '{ print $NF }'`;
+    echo $file;
+    YEAR=`echo $file | cut -d "-" -f 1`;
+    MONTH=`echo $file | cut -d "-" -f 2`;
+    DAY=`echo $file | cut -d "-" -f 3`;
+    HOUR=`echo $file | cut -d "-" -f 4`;
+
+    if [ ! -z "$YEAR"  ]
+      then
+        s3file=`aws s3 ls s3://$AWS_PATH/year=$YEAR/month=$MONTH/day=$DAY/$file`
+        RETVAL=$?
+        if [ $RETVAL -ne 0 ]
+        then
+          aws s3 cp $line s3://$AWS_PATH/year=$YEAR/month=$MONTH/day=$DAY/
+          rm -f $line
+        fi
+      fi
+    done
+fi
