@@ -19,14 +19,14 @@ We use redis to provide **live** counter data.  The formula for getting **live**
 
 To create impression, simply hit the pixel url: 
 ```shell
-https://pi.example.com/t/tenantcode/counterid
+https://pi.example.com/p/tenantcode/counterid
 # response: empty gif/pixel
 ```
 
 To lookup impression/count in the last 24-48 hours: 
 
 ```shell
-https://pi.example.com/lookup/tenantcode/counterid?apikey=resty-counter
+https://pi.example.com/p-query/tenantcode/counterid?apikey=resty-counter
 # response: todayCount, yesterdayCount
 ```
 
