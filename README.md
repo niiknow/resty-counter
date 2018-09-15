@@ -38,6 +38,7 @@ Docker environment variable and examples:
 --env AWS_DEFAULT_REGION=us-west-2 \
 --env AWS_PATH=bucketname/rootfolder
 --env REDIS_HOST=redis-host-name
+--env REDIS_AUTH=redis-auth-password
 --env API_KEY=pass-this-in-querystring-as-{apikey}
 ```
 

@@ -1,17 +1,6 @@
-#!/bin/sh
-
-source /etc/envvars
-
-# hit local healthcheck to force create new log
-curl -s 'http://localhost/healthcheck?cron=daily-backup'
-
-# reload nginx to make sure new log is created
-/usr/local/openresty/bin/openresty -s reload
-
-# if aws env are entered, then we can do backup
-if [[ "$AWS_PATH" != '' ]]; then
-  LOGDIR="/usr/local/openresty/nginx/logs/*.plog";
-  COUNTER=0;
+#!/bin/bash
+LOGDIR="data/logs/*.plog";
+COUNTER=0;
 
   # sync all access log files modified more than 2 hours ago
   # this mean current date file should not be included if
@@ -31,14 +20,7 @@ if [[ "$AWS_PATH" != '' ]]; then
       # skip first file found
       COUNTER=$(expr $COUNTER + 1)
       if [ $COUNTER -gt 1 ]; then
-        s3file=`aws s3 ls s3://$AWS_PATH/year=$YEAR/month=$MONTH/day=$DAY/$file`
-        RETVAL=$?
-        if [ $RETVAL -ne 0 ]
-        then
-          aws s3 cp $line s3://$AWS_PATH/year=$YEAR/month=$MONTH/day=$DAY/$file
-          rm -f $line
-        fi
+        echo $line 'hi'
       fi
     fi
   done
-fi
