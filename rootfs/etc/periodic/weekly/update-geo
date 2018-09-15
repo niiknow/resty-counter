@@ -17,4 +17,4 @@ mv /usr/local/openresty/nginx/logs/error.log /usr/local/openresty/nginx/logs/old
 /usr/local/openresty/bin/openresty -s reload
 
 # hit local healthcheck to force create new log
-curl -s 'http://localhost/healthcheck?cron=update-geo'
+curl -s 'http://127.0.0.1/healthcheck?cron=update-geo'

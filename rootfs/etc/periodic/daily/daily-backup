@@ -3,7 +3,7 @@
 source /etc/envvars
 
 # hit local healthcheck to force create new log
-curl -s 'http://localhost/healthcheck?cron=daily-backup'
+curl -s 'http://127.0.0.1/healthcheck?cron=daily-backup'
 
 # reload nginx to make sure new log is created
 /usr/local/openresty/bin/openresty -s reload
@@ -13,9 +13,7 @@ if [[ "$AWS_PATH" != '' ]]; then
   LOGDIR="/usr/local/openresty/nginx/logs/*.plog";
   COUNTER=0;
 
-  # sync all access log files modified more than 2 hours ago
-  # this mean current date file should not be included if
-  # you have something correctly hitting health check
+  # sync all plog files
   for line in `ls -t $LOGDIR`
   do
     #echo $line;
@@ -28,7 +26,7 @@ if [[ "$AWS_PATH" != '' ]]; then
 
     # only process with valid month
     if [ ! -z "$MONTH"  ]; then
-      # skip first file found
+      # skip first file since it's still collecting data
       COUNTER=$(expr $COUNTER + 1)
       if [ $COUNTER -gt 1 ]; then
         s3file=`aws s3 ls s3://$AWS_PATH/year=$YEAR/month=$MONTH/day=$DAY/$file`
