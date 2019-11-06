@@ -8,7 +8,7 @@ We use redis to provide **live** counter data.  The formula for getting **live**
 {aggregated log data} + {redis data} = {!!! profit !!!}
 
 * daily backup to s3
-* weekly update of maxmind geoip database
+* weekly update of maxmind geoip2 database
 
 # TECH STACK
 * **openresty** - use to create daily log files in the format "yyyy-mm-dd-access.log" and daily cron sync to "s3://bucket-name/year=yyyy/month=mm/day=dd/yyyy-mm-dd-access.log"

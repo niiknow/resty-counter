@@ -3,11 +3,7 @@
 source /etc/envvars
 
 # update geoip database
-cd /tmp
-curl -fSL https://geolite.maxmind.com/download/geoip/database/GeoLiteCity.dat.gz -o /tmp/GeoLiteCity.dat.gz
-gunzip -f GeoLiteCity.dat.gz
-rm -f /usr/local/openresty/nginx/conf/app/GeoLiteCity.dat
-mv GeoLiteCity.dat /usr/local/openresty/nginx/conf/app/GeoLiteCity.dat
+bash /usr/local/openresty/nginx/conf/update-geo.sh
 
 # archive old error log
 rm -f /usr/local/openresty/nginx/logs/old-error.log
@@ -18,3 +14,5 @@ mv /usr/local/openresty/nginx/logs/error.log /usr/local/openresty/nginx/logs/old
 
 # hit local healthcheck to force create new log
 curl -s 'http://127.0.0.1/healthcheck?cron=update-geo'
+
+
