@@ -96,12 +96,13 @@ function utils:lookupCount(tenant, day, key)
 end
 
 function utils:count(tenant, day, key, val)
+  local keyx = tonumber(os.getenv("REDIS_EXIRE_DAYS") or "3")
   local auth = os.getenv('REDIS_AUTH')
   local red  = redis:new()
   local hkey = string.format("%s!%s", tenant, day)
   local inc  = tonumber(val)
 
-  red:set_timeout(3000) -- 3 sec
+  red:set_timeout(3000) -- 3 seconds
 
   local ok, err = red:connect(os.getenv("REDIS_HOST"), 6379)
 
@@ -118,7 +119,12 @@ function utils:count(tenant, day, key, val)
 
   red:init_pipeline();
   red:hincrby(hkey, key, inc or 1)
-  red:expireat(hkey, os.time() + 86400*3)
+
+  -- must not want to expire if more than 9999 days
+  if (keyx < 9999) then
+    red:expireat(hkey, os.time() + 86400*keyx)
+  end
+
   red:commit_pipeline()
 
   -- put it into the connection pool of size 1000,

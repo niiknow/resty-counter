@@ -207,7 +207,7 @@ RUN apk update && apk upgrade && \
     curl -Ls https://github.com/nimmis/docker-utils/archive/master.tar.gz | tar xfz - && \
     /tmp/docker-utils-master/install.sh && \
     sed -i "s|\*.emerg|\#\*.emerg|" /etc/rsyslog.conf && \
-    sed -i 's/module\(load\=\"imklog\"\)/#module\(load\=\"imklog\"\)/' /etc/rsyslog.conf && \
+    sed -i 's/module(load\="imklog")/#module(load\="imklog")/' /etc/rsyslog.conf && \
     sed -i "s/-exec.*/-print0 \| sort -zn \| xargs -0 -I '{}' '{}'/" /etc/runit/1 && \
     apk add --no-cache --virtual runtime \
     coreutils \

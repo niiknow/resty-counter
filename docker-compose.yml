@@ -19,7 +19,7 @@ services:
     restart: unless-stopped
 
   app:
-    build: .
+    image: niiknow/resty-counter:0.2.2
     container_name: counter
     volumes:
       - "./data/app:/usr/local/openresty/nginx/conf/app"

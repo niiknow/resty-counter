@@ -39,8 +39,11 @@ Docker environment variable and examples:
 --env AWS_PATH=bucketname/rootfolder
 --env REDIS_HOST=redis-host-name
 --env REDIS_AUTH=redis-auth-password
+--env REDIS_EXIRE_DAYS=3
 --env API_KEY=pass-this-in-querystring-as-{apikey}
 ```
+
+- `REDIS_EXIRE_DAYS` - (default is 3) - set this to a number of days you want to store your counter.  Example where you want to store it for, let say 1 month or 31 days max.  This allow you to write some custom redis query to get your entire counter value from redis.  Set to any value greater than 9999 days to disable expiration.
 
 ## Suggestion
 You can setup something with AWS Lambda to trigger on s3 event and immediately process the log file.  Of course, once you hit a certain threshold, there are many limitations with Lambda.  The tip/trick here is to use AWS Athena since we already sending into s3 in the format that can be consumed by Athena.
