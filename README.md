@@ -39,7 +39,7 @@ Docker environment variable and examples:
 --env AWS_PATH=bucketname/rootfolder
 --env REDIS_HOST=redis-host-name
 --env REDIS_AUTH=redis-auth-password
---env REDIS_EXIRE_DAYS=3
+--env REDIS_EXPIRE_DAYS=3
 --env API_KEY=pass-this-in-querystring-as-{apikey}
 ```
 

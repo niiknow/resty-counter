@@ -96,7 +96,7 @@ function utils:lookupCount(tenant, day, key)
 end
 
 function utils:count(tenant, day, key, val)
-  local keyx = tonumber(os.getenv("REDIS_EXIRE_DAYS") or "3")
+  local keyx = tonumber(os.getenv("REDIS_EXPIRE_DAYS") or "3")
   local auth = os.getenv('REDIS_AUTH')
   local red  = redis:new()
   local hkey = string.format("%s!%s", tenant, day)
