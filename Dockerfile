@@ -197,7 +197,7 @@ ENV LUA_PATH="/usr/local/openresty/site/lualib/?.ljbc;/usr/local/openresty/site/
 
 ENV LUA_CPATH="/usr/local/openresty/site/lualib/?.so;/usr/local/openresty/lualib/?.so;./?.so;/usr/local/lib/lua/5.1/?.so;/usr/local/openresty/luajit/lib/lua/5.1/?.so;/usr/local/lib/lua/5.1/loadall.so;/usr/local/openresty/luajit/lib/lua/5.1/?.so"
 
-ENV ALLOWED_DOMAINS='.*' AUTO_SSL_VERSION='0.13.1' REDIS_HOST='redis.local' REDIS_AUTH='' API_KEY='resty-counter'
+ENV ALLOWED_DOMAINS='.*' AUTO_SSL_VERSION='0.13.1' REDIS_HOST='redis.local' REDIS_AUTH='' REDIS_EXPIRE_DAYS='3' API_KEY='resty-counter'
 
 RUN apk update && apk upgrade && \
     apk add ca-certificates rsyslog logrotate runit curl sudo bash && \
