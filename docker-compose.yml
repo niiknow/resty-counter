@@ -20,7 +20,7 @@ services:
 
   app:
     build: .
-    container_name: docker-resty-counter
+    container_name: counter
     volumes:
       - "./data/app:/usr/local/openresty/nginx/conf/app"
       - "./data/logs:/usr/local/openresty/nginx/logs"
